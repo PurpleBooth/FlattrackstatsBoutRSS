@@ -70,6 +70,7 @@ app.get('/:teamId', function (req, res, next) {
                     title: 'Upcoming: ' + element.home_team + " vs " + element.visitor_team,
                     description: element.sanc,
                     url: element.bout_url, // link to the item
+                    guid:  element.bout_url + "&upcoming=true", // we do this to make the user see the event again when it is played
                     date: element.date
                 });
             });
@@ -87,7 +88,8 @@ app.get('/:teamId', function (req, res, next) {
                 feed.item({
                     title: title,
                     description: element.sanc,
-                    url: element.bout_url, // link to the item
+                    url: element.bout_url,
+                    guid:  element.bout_url + "&upcoming=false",
                     date: element.date
                 });
             });
