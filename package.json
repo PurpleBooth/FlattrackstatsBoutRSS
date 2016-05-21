@@ -1,0 +1,19 @@
+{
+  "name": "Flattrackstats bout RSS",
+  "version": "0.1.0",
+  "description": "Convert Flattrackstats bout status page to an RSS feed to use with IFTTT or other things",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "cheerio": "^0.20.0",
+    "express": "^4.13.4",
+    "moment": "^2.13.0",
+    "promise": "^7.1.1",
+    "request": "^2.72.0",
+    "rss": "^1.2.1"
+  }
+}

@@ -1,0 +1,39 @@
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    facing: front
+    service: rollerrss
+    type: express
+  name: rollerrss-express-v0
+spec:
+  replicas: 2
+  selector:
+    service: rollerrss
+    type: express
+    version: v0
+  template:
+    metadata:
+      labels:
+        service: rollerrss
+        type: express
+        version: v0
+    spec:
+      containers:
+        -
+          image: quay.io/purplebooth/rollerrss
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8081
+            initialDelaySeconds: 15
+            timeoutSeconds: 1
+          name: rollerrss-express
+          ports:
+            -
+              containerPort: 8081
+              name: http
+              protocol: TCP
+      restartPolicy: Always
