@@ -105,6 +105,6 @@ app.get('/:teamId', function (req, res, next) {
 
 var PORT = (process.env.PORT || 8081);
 
-app.listen();
+app.listen(PORT);
 console.log('Magic happens on port '+PORT);
 exports = module.exports = app;

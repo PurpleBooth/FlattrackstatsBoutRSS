@@ -1,6 +1,6 @@
 {
   "name": "flattrackstats-bout-rss",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Convert Flattrackstats bout status page to an RSS feed to use with IFTTT or other things",
   "main": "index.js",
   "scripts": {
