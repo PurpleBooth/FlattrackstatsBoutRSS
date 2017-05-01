@@ -15,6 +15,7 @@
  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require('newrelic');
 var express = require('express');
 var RSS = require('rss');
 
@@ -22,6 +23,8 @@ var flattrackstats = require("./lib/flattrackstats");
 
 var app = express();
 app.get('/', function (req, res, next) {
+    console.log('rollerrss: homepage');
+    res.set('Cache-Control', 'max-age=315360000,public');
     res.send(
         "Visit http://flattrackstats.com/teams and then visit the team page " +
         "http://flattrackstats.com/teams/$teamId, copy the teamId and put it put it at the end of this url e.g. " +
@@ -31,6 +34,8 @@ app.get('/', function (req, res, next) {
 
 app.get('/:teamId', function (req, res, next) {
     var teamId = req.params.teamId;
+    console.log('rollerrss: building rss for team', {'team_id':teamId});
+
     var boutsForTeam = flattrackstats.getBouts(teamId);
 
     boutsForTeam.then(
@@ -95,6 +100,7 @@ app.get('/:teamId', function (req, res, next) {
             });
 
             res.type('rss');
+            res.set('Cache-Control', 'max-age=3600,public');
             res.send(feed.xml());
 
         }
