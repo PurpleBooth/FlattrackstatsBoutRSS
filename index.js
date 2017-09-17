@@ -15,13 +15,30 @@
  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require('newrelic');
+if(process.env.NEW_RELIC_APP_NAME && process.env.NEW_RELIC_LICENSE_KEY) {
+  require('newrelic');
+}
+
 var express = require('express');
+var helmet = require('helmet')
 var RSS = require('rss');
 
 var flattrackstats = require("./lib/flattrackstats");
 
 var app = express();
+app.use(helmet());
+app.use(helmet.hsts({
+  maxAge: 63072000,
+  includeSubDomains: true,
+  preload: true
+}))
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'none'"]
+  }
+}))
+app.use(helmet.referrerPolicy({ policy: 'strict-origin-when-cross-origin' }))
+
 app.get('/', function (req, res, next) {
     console.log('rollerrss: homepage');
     res.set('Cache-Control', 'max-age=315360000,public');
