@@ -1,0 +1,4 @@
+Done, the service will be running at
+https://{{ .Values.fqdn }}
+
+If you have configured the DNS

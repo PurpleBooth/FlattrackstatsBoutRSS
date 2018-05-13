@@ -1,0 +1,28 @@
+# Default values for fitness.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount:
+  start: 2
+  min: 2
+  max: 10
+  targetCPUUtilizationPercentage: 80
+image:
+  repository: gcr.io/purplebooth-gke/github-purplebooth-flattrackstatsboutrss
+  tag: latest
+  pullPolicy: Always
+service:
+  portName: http
+  type: NodePort
+  externalPort: 80
+  internalPort: 8081
+resources:
+  limits:
+    memory: "100Mi"
+    cpu: "100m"
+  requests:
+    memory: "55Mi"
+    cpu: "1m"
+newRelic:
+  appName: 'rollerderbyrss.purplebooth.co.uk'
+  licenseKey: 'license key here'
+fqdn: 'rollerderbyrss.purplebooth.co.uk'
