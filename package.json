@@ -9,13 +9,14 @@
   "author": "",
   "license": "GPL-3.0",
   "dependencies": {
-    "cheerio": "^0.20.0",
-    "express": "^4.15.4",
-    "helmet": "^3.8.1",
-    "moment": "^2.18.1",
-    "newrelic": "^1.40.0",
+    "cheerio": "^0.22.0",
+    "express": "^4.16.3",
+    "helmet": "^3.12.0",
+    "moment": "^2.22.1",
+    "newrelic": "^4.1.0",
+    "npm": "^6.0.1",
     "promise": "^7.3.1",
-    "request": "^2.81.0",
+    "request": "^2.86.0",
     "rss": "^1.2.2"
   }
 }
