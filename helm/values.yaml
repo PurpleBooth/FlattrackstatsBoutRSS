@@ -6,10 +6,8 @@ replicaCount:
   min: 2
   max: 10
   targetCPUUtilizationPercentage: 50
-image:
-  repository: gcr.io/purplebooth-gke/github-purplebooth-flattrackstatsboutrss
-  tag: latest
-  pullPolicy: Always
+image: gcr.io/purplebooth-gke/github-purplebooth-flattrackstatsboutrss:latest
+imagePullPolicy: Always
 service:
   portName: http
   type: NodePort
