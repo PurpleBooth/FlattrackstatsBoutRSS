@@ -11,6 +11,7 @@ deploy:
     - name: rollerrss
       chartPath: helm
       namespace: default
+      valuesFilePath: secrets/helm-secrets.yml
       values:
         image: gcr.io/purplebooth-gke/github-purplebooth-flattrackstatsboutrss
 profiles:
