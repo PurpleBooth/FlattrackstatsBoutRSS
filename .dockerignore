@@ -1,0 +1,6 @@
+node_modules
+FlattrackstatsBoutRSS.key
+.git
+.idea
+secrets/helm-secrets.yml
+helm
