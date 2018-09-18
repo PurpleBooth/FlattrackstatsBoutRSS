@@ -1,0 +1,49 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: flattrackstats-bout-rss
+spec:
+  gateways:
+    - knative-shared-gateway.knative-serving.svc.cluster.local
+  hosts:
+    - rollerderbyrss.purplebooth.co.uk
+  http:
+    - match:
+        - authority:
+            exact: rollerderbyrss.purplebooth.co.uk
+      rewrite:
+        authority: flattrackstats-bout-rss.default.svc.cluster.local
+      route:
+        - destination:
+            host: knative-ingressgateway.istio-system.svc.cluster.local
+          weight: 100
+---
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: flattrackstats-bout-rss
+spec:
+  runLatest:
+    configuration:
+      build:
+        serviceAccountName: build-bot
+        source:
+          git:
+            url: https://github.com/PurpleBooth/FlattrackstatsBoutRSS.git
+            revision: master
+        template:
+          name: kaniko
+          arguments:
+            - name: IMAGE
+              value: &image eu.gcr.io/knative-f3b2d46c/flattrackstats-bout-rss:latest
+      revisionTemplate:
+        spec:
+          container:
+            image: *image
+            imagePullPolicy: Always
+            livenessProbe:
+              httpGet:
+                path: /
+            readinessProbe:
+              httpGet:
+                path: /
