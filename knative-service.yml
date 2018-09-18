@@ -2,6 +2,8 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: flattrackstats-bout-rss
+  labels:
+    app: flattrackstats-bout-rss
 spec:
   gateways:
     - knative-shared-gateway.knative-serving.svc.cluster.local
@@ -22,6 +24,8 @@ apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
   name: flattrackstats-bout-rss
+  labels:
+    app: flattrackstats-bout-rss
 spec:
   runLatest:
     configuration:
