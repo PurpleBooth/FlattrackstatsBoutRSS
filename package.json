@@ -13,7 +13,7 @@
     "express": "^4.16.3",
     "helmet": "^3.13.0",
     "moment": "^2.22.2",
-    "newrelic": "^4.8.1",
+    "newrelic": "^5.6.1",
     "npm": "^6.4.1",
     "promise": "^7.3.1",
     "request": "^2.88.0",
