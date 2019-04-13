@@ -10,7 +10,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "cheerio": "^0.22.0",
-    "express": "^4.16.3",
+    "express": "^4.16.4",
     "helmet": "^3.13.0",
     "moment": "^2.22.2",
     "newrelic": "^5.6.3",
