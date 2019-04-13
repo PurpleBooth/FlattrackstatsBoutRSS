@@ -21,18 +21,18 @@ steps:
     waitFor: ['run-deploy']
     id: 'run-domain-mapping'
   - name: 'gcr.io/cloud-builders/curl'
-    args: [ '-sSL', '-D', '-', '-o', '/dev/null', 'http://rollerderbyrss.purplebooth.co.uk']
+    args: [ "-H", "X-Smoke-Test: true", '-sSL', '-D', '-', '-o', '/dev/null', 'http://rollerderbyrss.purplebooth.co.uk']
     waitFor: ['run-domain-mapping']
     id: 'curl-http-homepage'
   - name: 'gcr.io/cloud-builders/curl'
-    args: [ '-sSL', '-D', '-', '-o', '/dev/null', 'http://rollerderbyrss.purplebooth.co.uk']
+    args: [ "-H", "X-Smoke-Test: true", '-sSL', '-D', '-', '-o', '/dev/null', 'http://rollerderbyrss.purplebooth.co.uk']
     waitFor: ['run-domain-mapping']
     id: 'curl-https-homepage'
   - name: 'gcr.io/cloud-builders/curl'
-    args: [ '-sSL', '-D', '-', '-o', '/dev/null', 'https://rollerderbyrss.purplebooth.co.uk/13214']
+    args: [ "-H", "X-Smoke-Test: true", '-sSL', '-D', '-', '-o', '/dev/null', 'https://rollerderbyrss.purplebooth.co.uk/13214']
     waitFor: ['run-domain-mapping']
     id: 'curl-https-team-page'
   - name: 'gcr.io/cloud-builders/curl'
-    args: [ '-sSL', '-D', '-', '-o', '/dev/null', 'http://rollerderbyrss.purplebooth.co.uk/13214']
+    args: [ "-H", "X-Smoke-Test: true", '-sSL', '-D', '-', '-o', '/dev/null', 'http://rollerderbyrss.purplebooth.co.uk/13214']
     waitFor: ['run-domain-mapping']
     id: 'curl-http-team-page'
