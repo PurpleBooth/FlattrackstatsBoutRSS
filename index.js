@@ -30,7 +30,7 @@ var loggingTransports = [new winston.transports.Console()];
 
 if (false === disableStackdriver) {
     var {LoggingWinston} = require('@google-cloud/logging-winston');
-    loggingTransports = [new LoggingWinston({logName: "flattrackstats_bout_rss"})]
+    loggingTransports.push(new LoggingWinston({logName: "flattrackstats_bout_rss"}))
 }
 
 var logger = winston.createLogger({
