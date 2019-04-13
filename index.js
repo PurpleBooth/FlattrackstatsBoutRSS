@@ -15,10 +15,6 @@
  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-if(process.env.NEW_RELIC_APP_NAME && process.env.NEW_RELIC_LICENSE_KEY) {
-  require('newrelic');
-}
-
 var express = require('express');
 var helmet = require('helmet')
 var RSS = require('rss');

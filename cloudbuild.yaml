@@ -1,16 +1,17 @@
 steps:
   # build the container image
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/rollerderbyrss', '.']
-  # push the container image to Container Registry
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/$PROJECT_ID/rollerderbyrss']
-  # Deploy container image to Cloud Run
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['beta', 'run', 'deploy', 'rollerderbyrss', '--image', 'gcr.io/$PROJECT_ID/rollerderbyrss', '--allow-unauthenticated', '--region', 'us-central1']
-  # Add domain mapping
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['beta', 'run', 'domain-mappings', 'create', '--domain', 'rollerderbyrss.purplebooth.co.uk', '--service', 'rollerderbyrss', '--region', 'us-central1']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/rollerderbyrss', '.']
+    # push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/rollerderbyrss']
+    # Deploy container image to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['beta', 'run', 'deploy', 'rollerderbyrss', '--image', 'gcr.io/$PROJECT_ID/rollerderbyrss', '--allow-unauthenticated', '--region', 'us-central1']
+    # Add domain mapping
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args: [ '-c', 'gcloud beta run domain-mappings describe --domain rollerderbyrss.purplebooth.co.uk --region us-central1 || gcloud beta run domain-mappings create --service rollerderbyrss --domain rollerderbyrss.purplebooth.co.uk --region us-central1']
 images:
-- gcr.io/$PROJECT_ID/rollerderbyrss
+  - gcr.io/$PROJECT_ID/rollerderbyrss
 
