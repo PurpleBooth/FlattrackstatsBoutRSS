@@ -7,7 +7,7 @@ steps:
   args: ['push', 'gcr.io/$PROJECT_ID/rollerderbyrss']
   # Deploy container image to Cloud Run
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['beta', 'run', 'deploy', 'rollerderbyrss', '--image', 'gcr.io/$PROJECT_ID/rollerderbyrss', '--allow-unauthenticated', 'true', '--region', 'us-central1']
+  args: ['beta', 'run', 'deploy', 'rollerderbyrss', '--image', 'gcr.io/$PROJECT_ID/rollerderbyrss', '--allow-unauthenticated', '--region', 'us-central1']
   # Add domain mapping
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['beta', 'run', 'domain-mappings', 'create', '--domain', 'rollerderbyrss.purplebooth.co.uk', '--service', 'rollerderbyrss']
