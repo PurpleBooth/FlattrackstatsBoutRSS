@@ -152,5 +152,5 @@ app.use(expressWinston.errorLogger({
 var PORT = (process.env.PORT || 8080);
 
 app.listen(PORT);
-logger.info('Magic happens on port ' + PORT);
+logger.info('Flattrackstats bout RSS container started on http://0.0.0.0:' + PORT);
 exports = module.exports = app;
