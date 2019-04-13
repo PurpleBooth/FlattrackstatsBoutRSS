@@ -39,7 +39,9 @@ app.use(helmet.referrerPolicy({ policy: 'strict-origin-when-cross-origin' }))
 
 app.get('/', function (req, res, next) {
     console.log('rollerrss: homepage');
-    res.set('Cache-Control', 'max-age=315360000,public');
+    var cacheSeconds = '315360000';
+    res.set('Cache-Control', 'max-age=' + cacheSeconds + ',public');
+    res.set('Access-Control-Max-Age', cacheSeconds);
     res.send(
         "Visit http://flattrackstats.com/teams and then visit the team page " +
         "http://flattrackstats.com/teams/$teamId, copy the teamId and put it put it at the end of this url e.g. " +
@@ -115,7 +117,9 @@ app.get('/:teamId', function (req, res, next) {
             });
 
             res.type('rss');
-            res.set('Cache-Control', 'max-age=3600,public');
+            var cacheSeconds = '3600';
+            res.set('Access-Control-Max-Age', cacheSeconds);
+            res.set('Cache-Control', 'max-age=' + cacheSeconds + ',public');
             res.send(feed.xml());
 
         }
