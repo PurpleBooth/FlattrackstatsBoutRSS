@@ -21,12 +21,20 @@ var express = require('express');
 var helmet = require('helmet');
 var RSS = require('rss');
 var cors = require('cors');
-var morgan = require('morgan');
+var winston = require('winston');
+var expressWinston = require('express-winston');
+var {LoggingWinston} = require('@google-cloud/logging-winston');
 
 var flattrackstats = require("./lib/flattrackstats");
 
 var app = express();
-app.use(morgan('combined'));
+app.use(expressWinston.logger({
+    transports: [
+        new winston.transports.Console(),
+        new LoggingWinston()
+    ]
+}));
+
 app.use(helmet());
 app.use(helmet.hsts({
     maxAge: 63072000,
@@ -125,6 +133,12 @@ app.get('/:teamId', cors({maxAge: teamIdCacheDuration}), function (req, res, nex
         res.sendStatus(404);
     });
 });
+app.use(expressWinston.errorLogger({
+    transports: [
+        new winston.transports.Console(),
+        new LoggingWinston()
+    ]
+}));
 
 var PORT = (process.env.PORT || 8080);
 

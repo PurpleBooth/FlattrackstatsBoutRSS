@@ -10,9 +10,6 @@ COPY package-lock.json /usr/src/app/
 RUN npm install
 COPY . /usr/src/app
 
-FROM gcr.io/distroless/nodejs
-COPY --from=build-env /usr/src/app /usr/src/app
-
 ENV PORT=8080
 EXPOSE 8080
-CMD [ "/usr/src/app/index.js" ]
+CMD [ "npm", "start" ]
