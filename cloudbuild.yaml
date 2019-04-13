@@ -2,16 +2,37 @@ steps:
   # build the container image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/$PROJECT_ID/rollerderbyrss', '.']
+    waitFor: ['-']
+    id: 'docker-build'
     # push the container image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/rollerderbyrss']
+    waitFor: ['docker-build']
+    id: 'docker-push'
     # Deploy container image to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
     args: ['beta', 'run', 'deploy', 'rollerderbyrss', '--image', 'gcr.io/$PROJECT_ID/rollerderbyrss', '--allow-unauthenticated', '--region', 'us-central1']
+    waitFor: ['docker-push']
+    id: 'run-deploy'
     # Add domain mapping
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args: [ '-c', 'gcloud beta run domain-mappings describe --domain rollerderbyrss.purplebooth.co.uk --region us-central1 || gcloud beta run domain-mappings create --service rollerderbyrss --domain rollerderbyrss.purplebooth.co.uk --region us-central1']
-images:
-  - gcr.io/$PROJECT_ID/rollerderbyrss
-
+    waitFor: ['run-deploy']
+    id: 'run-domain-mapping'
+  - name: 'gcr.io/cloud-builders/curl'
+    args: [ '-sSL', '-D', '-', '-o', '/dev/null', 'http://rollerderbyrss.purplebooth.co.uk']
+    waitFor: ['run-domain-mapping']
+    id: 'curl-http-homepage'
+  - name: 'gcr.io/cloud-builders/curl'
+    args: [ '-sSL', '-D', '-', '-o', '/dev/null', 'http://rollerderbyrss.purplebooth.co.uk']
+    waitFor: ['run-domain-mapping']
+    id: 'curl-https-homepage'
+  - name: 'gcr.io/cloud-builders/curl'
+    args: [ '-sSL', '-D', '-', '-o', '/dev/null', 'https://rollerderbyrss.purplebooth.co.uk/13214']
+    waitFor: ['run-domain-mapping']
+    id: 'curl-https-team-page'
+  - name: 'gcr.io/cloud-builders/curl'
+    args: [ '-sSL', '-D', '-', '-o', '/dev/null', 'http://rollerderbyrss.purplebooth.co.uk/13214']
+    waitFor: ['run-domain-mapping']
+    id: 'curl-http-team-page'
