@@ -14,25 +14,36 @@
  You should have received a copy of the GNU General Public License
  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
+var disableStackdriver = (process.env.DISABLE_STACKDRIVER === "true" || false);
 
+if (false === disableStackdriver) {
+    require('@google-cloud/trace-agent').start();
+}
 
-require('@google-cloud/trace-agent').start();
 var express = require('express');
 var helmet = require('helmet');
 var RSS = require('rss');
 var cors = require('cors');
 var winston = require('winston');
 var expressWinston = require('express-winston');
-var {LoggingWinston} = require('@google-cloud/logging-winston');
+var loggingTransports = [new winston.transports.Console()];
+
+if (false === disableStackdriver) {
+    var {LoggingWinston} = require('@google-cloud/logging-winston');
+    loggingTransports.push(new LoggingWinston())
+}
+
+var logger = winston.createLogger({
+    level: 'info',
+    transports: loggingTransports,
+});
 
 var flattrackstats = require("./lib/flattrackstats");
 
 var app = express();
+
 app.use(expressWinston.logger({
-    transports: [
-        new winston.transports.Console(),
-        new LoggingWinston()
-    ]
+    transports: loggingTransports,
 }));
 
 app.use(helmet());
@@ -133,15 +144,13 @@ app.get('/:teamId', cors({maxAge: teamIdCacheDuration}), function (req, res, nex
         res.sendStatus(404);
     });
 });
+
 app.use(expressWinston.errorLogger({
-    transports: [
-        new winston.transports.Console(),
-        new LoggingWinston()
-    ]
+    transports: loggingTransports
 }));
 
 var PORT = (process.env.PORT || 8080);
 
 app.listen(PORT);
-console.log('Magic happens on port ' + PORT);
+logger.info('Magic happens on port ' + PORT);
 exports = module.exports = app;
