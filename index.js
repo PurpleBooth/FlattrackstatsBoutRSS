@@ -15,8 +15,10 @@
  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+require('@google-cloud/trace-agent').start();
 var express = require('express');
-var helmet = require('helmet')
+var helmet = require('helmet');
 var RSS = require('rss');
 
 var flattrackstats = require("./lib/flattrackstats");
