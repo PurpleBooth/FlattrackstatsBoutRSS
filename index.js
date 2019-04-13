@@ -20,28 +20,27 @@ require('@google-cloud/trace-agent').start();
 var express = require('express');
 var helmet = require('helmet');
 var RSS = require('rss');
+var cors = require('cors');
 
 var flattrackstats = require("./lib/flattrackstats");
 
 var app = express();
 app.use(helmet());
 app.use(helmet.hsts({
-  maxAge: 63072000,
-  includeSubDomains: true,
-  preload: true
-}))
+    maxAge: 63072000,
+    includeSubDomains: true,
+    preload: true
+}));
 app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'none'"]
-  }
-}))
-app.use(helmet.referrerPolicy({ policy: 'strict-origin-when-cross-origin' }))
+    directives: {
+        defaultSrc: ["'none'"]
+    }
+}));
+app.use(helmet.referrerPolicy({policy: 'strict-origin-when-cross-origin'}));
 
-app.get('/', function (req, res, next) {
-    console.log('rollerrss: homepage');
-    var cacheSeconds = '315360000';
-    res.set('Cache-Control', 'max-age=' + cacheSeconds + ',public');
-    res.set('Access-Control-Max-Age', cacheSeconds);
+var homepageCacheSeconds = 315360000;
+app.get('/', cors({maxAge: homepageCacheSeconds}), function (req, res, next) {
+    res.set('Cache-Control', 'max-age=' + homepageCacheSeconds + ',public');
     res.send(
         "Visit http://flattrackstats.com/teams and then visit the team page " +
         "http://flattrackstats.com/teams/$teamId, copy the teamId and put it put it at the end of this url e.g. " +
@@ -49,10 +48,9 @@ app.get('/', function (req, res, next) {
     )
 });
 
-app.get('/:teamId', function (req, res, next) {
+var teamIdCacheDuration = 3600;
+app.get('/:teamId', cors({maxAge:teamIdCacheDuration}), function (req, res, next) {
     var teamId = req.params.teamId;
-    console.log('rollerrss: building rss for team', {'team_id':teamId});
-
     var boutsForTeam = flattrackstats.getBouts(teamId);
 
     boutsForTeam.then(
@@ -92,7 +90,7 @@ app.get('/:teamId', function (req, res, next) {
                     title: 'Upcoming: ' + element.home_team + " vs " + element.visitor_team,
                     description: element.sanc,
                     url: element.bout_url, // link to the item
-                    guid:  element.bout_url + "&upcoming=true", // we do this to make the user see the event again when it is played
+                    guid: element.bout_url + "&upcoming=true", // we do this to make the user see the event again when it is played
                     date: element.date
                 });
             });
@@ -111,15 +109,13 @@ app.get('/:teamId', function (req, res, next) {
                     title: title,
                     description: element.sanc,
                     url: element.bout_url,
-                    guid:  element.bout_url + "&upcoming=false",
+                    guid: element.bout_url + "&upcoming=false",
                     date: element.date
                 });
             });
 
             res.type('rss');
-            var cacheSeconds = '3600';
-            res.set('Access-Control-Max-Age', cacheSeconds);
-            res.set('Cache-Control', 'max-age=' + cacheSeconds + ',public');
+            res.set('Cache-Control', 'max-age=' + teamIdCacheDuration + ',public');
             res.send(feed.xml());
 
         }
@@ -131,5 +127,5 @@ app.get('/:teamId', function (req, res, next) {
 var PORT = (process.env.PORT || 8080);
 
 app.listen(PORT);
-console.log('Magic happens on port '+PORT);
+console.log('Magic happens on port ' + PORT);
 exports = module.exports = app;
