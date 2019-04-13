@@ -21,10 +21,12 @@ var express = require('express');
 var helmet = require('helmet');
 var RSS = require('rss');
 var cors = require('cors');
+var morgan = require('morgan');
 
 var flattrackstats = require("./lib/flattrackstats");
 
 var app = express();
+app.use(morgan('combined'));
 app.use(helmet());
 app.use(helmet.hsts({
     maxAge: 63072000,
@@ -49,7 +51,7 @@ app.get('/', cors({maxAge: homepageCacheSeconds}), function (req, res, next) {
 });
 
 var teamIdCacheDuration = 3600;
-app.get('/:teamId', cors({maxAge:teamIdCacheDuration}), function (req, res, next) {
+app.get('/:teamId', cors({maxAge: teamIdCacheDuration}), function (req, res, next) {
     var teamId = req.params.teamId;
     var boutsForTeam = flattrackstats.getBouts(teamId);
 
