@@ -9,7 +9,7 @@
   "author": "",
   "license": "GPL-3.0",
   "dependencies": {
-    "@google-cloud/logging-winston": "^2.0.0",
+    "@google-cloud/logging-winston": "^2.1.0",
     "@google-cloud/trace-agent": "^3.6.0",
     "cheerio": "^0.22.0",
     "cors": "^2.8.5",
